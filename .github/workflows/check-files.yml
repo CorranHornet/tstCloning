@@ -1,0 +1,40 @@
+name: Check Master Branch Integrity
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  validate-master:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Check if only one branch exists
+      run: |
+        BRANCH_COUNT=$(git branch -r | grep -v '\->' | wc -l)
+        echo "Branch count: $BRANCH_COUNT"
+        if [ "$BRANCH_COUNT" -ne 1 ]; then
+          echo "Error: More than one remote branch exists!"
+          exit 1
+        fi
+
+    - name: Check if frågor.txt exists
+      run: |
+        if [ ! -f "frågor.txt" ]; then
+          echo "Missing file: frågor.txt"
+          exit 1
+        fi
+
+    - name: Check if reflektion.txt exists
+      run: |
+        if [ ! -f "reflektion.txt" ]; then
+          echo "Missing file: reflektion.txt"
+          exit 1
+        fi
+
+    - name: Success message
+      run: echo "repo now has the file frågor.txt and reflektion.txt and all branches have been deleted"
