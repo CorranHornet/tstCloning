@@ -1,7 +1,6 @@
 name: Check Master Branch Integrity
 on:
   workflow_dispatch:
-on:
   push:
     branches:
       - master
